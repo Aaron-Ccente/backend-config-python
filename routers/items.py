@@ -17,12 +17,12 @@ def get_db():
         db.close()
 
 @router.get("/")
-def get_items(db: Session = Depends(get_db)):
+async def get_items(db: Session = Depends(get_db)):
     return db.query(models.Item).all()
 
 
 @router.post("/")
-def create_item(item: model.ItemCreate, db: Session = Depends(get_db)) -> Dict[str, Union[str, model.ItemResponse]]:
+async def create_item(item: model.ItemCreate, db: Session = Depends(get_db)) -> Dict[str, Union[str, model.ItemResponse]]:
     item = models.Item(name=item.name, description=item.description)
     db.add(item)
     db.commit()
