@@ -15,5 +15,5 @@ def get_db():
         db.close()
 
 @router.get("/")
-def get_items(db: Session = Depends(get_db)):
+async def get_items(db: Session = Depends(get_db)):
     return db.query(models.Item).all()
