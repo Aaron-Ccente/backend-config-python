@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from db.database import SessionLocal, engine, Base
 
-from routers import items
+from routers import items, users
 app = FastAPI()
 
 @app.get("/")
@@ -24,4 +24,6 @@ def get_db():
 # Rutas para la clase items
 app.include_router(items.router)
 
+# Rutas para la clase users
+app.include_router(users.router)
 # Rutas para la clase users
