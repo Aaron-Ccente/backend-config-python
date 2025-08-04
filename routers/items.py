@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from typing import Dict, Union
 from sqlalchemy.orm import Session
-from db.database import SessionLocal
+from db import config
 from models import models
 from models.item import model
 
@@ -9,20 +9,12 @@ router = APIRouter(prefix="/items",
                    tags=["items"],
                    responses={404: {"message": "No encontrado"}})
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
 @router.get("/")
-async def get_items(db: Session = Depends(get_db)):
+async def get_items(db: Session = Depends(config.get_db)):
     return db.query(models.Item).all()
 
-
 @router.post("/")
-async def create_item(item: model.ItemCreate, db: Session = Depends(get_db)) -> Dict[str, Union[str, model.ItemResponse]]:
+async def create_item(item: model.ItemCreate, db: Session = Depends(config.get_db)) -> Dict[str, Union[str, model.ItemResponse]]:
     item = models.Item(name=item.name, description=item.description)
     db.add(item)
     db.commit()
